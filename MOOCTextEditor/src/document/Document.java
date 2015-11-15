@@ -1,5 +1,6 @@
 package document;
 
+import java.text.DecimalFormat;
 /** 
  * A class that represents a text document
  * @author UC San Diego Intermediate Programming MOOC team
@@ -144,7 +145,9 @@ public abstract class Document {
 		int words = getNumWords();
 		int syllables = getNumSyllables();
 		int sentences = getNumSentences();
-	    return 208.635 - (1.015 * (words/sentences)) - (84.6 * (syllables/words));
+		DecimalFormat df = new DecimalFormat("###.#");
+		double flesch = 208.635 - (1.015 * (words/sentences)) - (84.6 * (syllables/words)); 
+	    return Double.parseDouble(df.format(flesch));
 	}
 	
 	
