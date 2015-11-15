@@ -64,7 +64,17 @@ public class BasicDocument extends Document
 	{
 	    //TODO: Implement this method.  See the Module 1 support videos 
         // if you need help.
-        return 0;
+		int numSyllables = 0;
+		List<String> allWords = getTokens("[A-Za-z]+");
+		for (String eachWord : allWords) {
+			String [] syllables = eachWord.split("[aeiouy]+");
+			if (syllables.length > 1) {
+				numSyllables += (syllables.length - 1);
+			} else {
+				numSyllables += syllables.length;
+			}
+		}
+        return numSyllables;
 	}
 	
 	
