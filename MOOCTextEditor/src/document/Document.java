@@ -53,7 +53,31 @@ public abstract class Document {
 		// TODO: Implement this method so that you can call it from the 
 	    // getNumSyllables method in BasicDocument (module 1) and 
 	    // EfficientDocument (module 2).
-	    return 0;
+		boolean vowel = false;
+		int syllables = 0;
+		char [] letters = word.toLowerCase().toCharArray();
+		for (int i = 0 ; i < letters.length; i++ ) {
+			switch(letters[i]) {  
+				case 'a': case 'i': case 'o': case 'u': case 'y':
+					if (!vowel) {
+							vowel = true;
+							syllables += 1;
+						}
+					break;
+				case 'e':
+					if (!vowel && i != letters.length - 1 ) {
+						vowel = true;
+						syllables += 1;
+					}
+					break;
+				default:
+					vowel = false;
+			}
+		}
+		if (syllables == 0) {
+			syllables = 1;
+		}
+		return syllables;
 	}
 	
 	/** A method for testing
