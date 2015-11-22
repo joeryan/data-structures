@@ -50,6 +50,9 @@ public class EfficientDocument extends Document {
 				numSentences ++;
 			}
 		}
+	    if (tokens.size() > 0 && isWord(tokens.get(tokens.size()-1))) {
+	    	numSentences ++;
+	    }
 		// TODO: Finish this method.  Remember the countSyllables method from 
 		// Document.  That will come in handy here.
 	}
