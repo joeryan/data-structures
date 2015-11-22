@@ -58,7 +58,26 @@ public class DocumentBenchmarking {
 			 * 6. Print out the time it took to complete the loop in step 5 
 			 *      (on the same line as the first print statement) followed by a newline (\n) 
 			 */  
+			 System.out.print(numToCheck + "\t");
 			 
+			 String text = getStringFromFile(textfile, numToCheck);
+			 long startTime = System.nanoTime();
+			 for (int trial = 0; trial < trials; trial ++) {
+				BasicDocument basicDoc = new BasicDocument(text);
+				basicDoc.getFleschScore();
+			 }
+			 long endTime = System.nanoTime();
+			 double runTime =  (endTime - startTime) / 1000000000.0;
+			 System.out.print(runTime + "\t");
+			 
+			 startTime = System.nanoTime();
+			 for (int trial = 0; trial < trials; trial ++) {
+				EfficientDocument efficDoc = new EfficientDocument(text);
+				efficDoc.getFleschScore();
+			 }
+			 endTime = System.nanoTime();
+			 runTime = (endTime - startTime) / 1000000000.0;
+			 System.out.print(runTime + "\n");
 		}
 	
 	}

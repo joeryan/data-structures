@@ -68,7 +68,7 @@ public class EfficientDocument extends Document {
 	@Override
 	public int getNumWords() {
 		//TODO: write this method.  Hint: It's simple
-	    return numWords;
+	    return 0;
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class EfficientDocument extends Document {
 	@Override
 	public int getNumSentences() {
         //TODO: write this method.  Hint: It's simple
-        return numSentences;
+        return 0;
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class EfficientDocument extends Document {
 	@Override
 	public int getNumSyllables() {
         //TODO: write this method.  Hint: It's simple
-        return numSyllables;
+        return 0;
 	}
 	
 	// Can be used for testing

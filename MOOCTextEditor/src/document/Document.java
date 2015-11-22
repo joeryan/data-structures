@@ -146,8 +146,7 @@ public abstract class Document {
 		int syllables = getNumSyllables();
 		int sentences = getNumSentences();
 		DecimalFormat df = new DecimalFormat("###.#");
-		double flesch = 206.835 - (1.015 * ((float)words/(float)sentences)) 
-				- (84.6 * ((float)syllables/(float)words)); 
+		double flesch = 208.635 - (1.015 * (words/sentences)) - (84.6 * (syllables/words)); 
 	    return Double.parseDouble(df.format(flesch));
 	}
 	
