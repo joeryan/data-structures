@@ -1,5 +1,6 @@
 package textgen;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -33,6 +34,31 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	public void train(String sourceText)
 	{
 		// TODO: Implement this method
+		
+		String[] theWords = sourceText.split("[ ]+");
+		this.starter = theWords[0];
+		String prevWord = this.starter;
+		int nodeIndex;
+		for (String nextWord : Arrays.copyOfRange(theWords, 1, theWords.length)) {
+			nodeIndex = findWordNode(prevWord);
+			if (nodeIndex < 0) {
+				ListNode newNode = new ListNode(prevWord);
+				newNode.addNextWord(nextWord);
+				wordList.add(newNode);
+			} else {
+				wordList.get(nodeIndex).addNextWord(nextWord);
+			}
+			prevWord = nextWord;
+		}
+			
+		nodeIndex = findWordNode(prevWord);
+		if (nodeIndex < 0) {
+			ListNode newNode = new ListNode(prevWord);
+			newNode.addNextWord(this.starter);
+			wordList.add(newNode);
+		} else {
+			wordList.get(nodeIndex).addNextWord(this.starter);
+		}
 	}
 	
 	/** 
@@ -41,7 +67,20 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	@Override
 	public String generateText(int numWords) {
 	    // TODO: Implement this method
-		return null;
+		String returnText = "";
+		int nextNodeIndex;
+		
+		String currentWord = starter;
+		for (int i = 0; i < numWords; i++) {
+			returnText += (currentWord + " ");
+			nextNodeIndex = findWordNode(currentWord);
+			if (nextNodeIndex >=0) {
+				currentWord = wordList.get(nextNodeIndex).getRandomNextWord(this.rnGenerator);
+			} else {
+				currentWord = "FAILURE!!!";
+			}
+		}
+		return returnText;
 	}
 	
 	
@@ -62,9 +101,51 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	public void retrain(String sourceText)
 	{
 		// TODO: Implement this method.
+		wordList = new LinkedList<ListNode>();
+		
+		String[] theWords = sourceText.split("[ ]+");
+		this.starter = theWords[0];
+		String prevWord = this.starter;
+		int nodeIndex;
+		
+		for (String nextWord : Arrays.copyOfRange(theWords, 1, theWords.length)) {
+			nodeIndex = findWordNode(prevWord);
+			if (nodeIndex < 0) {
+				ListNode newNode = new ListNode(prevWord);
+				newNode.addNextWord(nextWord);
+				wordList.add(newNode);
+			} else {
+				wordList.get(nodeIndex).addNextWord(nextWord);
+			}
+			prevWord = nextWord;
+
+		}
+		
+		nodeIndex = findWordNode(prevWord);
+		if (nodeIndex < 0) {
+			ListNode newNode = new ListNode(prevWord);
+			newNode.addNextWord(starter);
+			wordList.add(newNode);
+		} else {
+			wordList.get(nodeIndex).addNextWord(this.starter);
+		}
 	}
+
 	
 	// TODO: Add any private helper methods you need here.
+	private int findWordNode(String word) {
+		int wordIndex = -1;
+		int i = 0;
+		for (ListNode eachNode : wordList) {
+			if (eachNode.getWord().equals(word)) {
+				wordIndex = i;
+				break;
+			} else {
+				i++;
+			}
+		}
+		return wordIndex;
+	}
 	
 	
 	/**
@@ -144,7 +225,8 @@ class ListNode
 		// TODO: Implement this method
 	    // The random number generator should be passed from 
 	    // the MarkovTextGeneratorLoL class
-	    return null;
+		int randomWord = generator.nextInt(nextWords.size());
+	    return nextWords.get(randomWord);
 	}
 
 	public String toString()

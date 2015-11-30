@@ -16,7 +16,7 @@ import org.junit.Test;
  */
 public class MyLinkedListTester {
 
-	private static final int LONG_LIST_LENGTH =10; 
+	private static final int LONG_LIST_LENGTH = 10; 
 
 	MyLinkedList<String> shortList;
 	MyLinkedList<Integer> emptyList;
@@ -114,7 +114,21 @@ public class MyLinkedListTester {
 		assertEquals("Remove: check element 0 is correct ", (Integer)21, list1.get(0));
 		assertEquals("Remove: check size is correct ", 2, list1.size());
 		
-		// TODO: Add more tests here
+		// DONE: Add more tests here
+		// test off the end of the longer array
+		try {
+			longerList.get(-1);
+			fail("Check out of bounds");
+		}
+		catch (IndexOutOfBoundsException e) {
+		
+		}
+		try {
+			longerList.remove(LONG_LIST_LENGTH);
+			fail("Check out of bounds");
+		}
+		catch (IndexOutOfBoundsException e) {
+		}
 	}
 	
 	/** Test adding an element into the end of the list, specifically
@@ -123,7 +137,18 @@ public class MyLinkedListTester {
 	@Test
 	public void testAddEnd()
 	{
-        // TODO: implement this test
+        // DONE: implement this test
+		// test adding to the end of an empty list
+		emptyList.add(69);
+		assertEquals("Verify the size is now 1", 1, emptyList.size());
+		assertEquals("Check that the element was added", (Integer)69, (Integer)emptyList.get(0));
+		
+		// test adding an item to the longer list
+		longerList.add(69);
+		assertEquals("Verify the size is now 1", (LONG_LIST_LENGTH+1), longerList.size());
+		assertEquals("Check that the element was added", 
+				(Integer)69, (Integer)longerList.get(LONG_LIST_LENGTH));
+		
 		
 	}
 
@@ -132,7 +157,15 @@ public class MyLinkedListTester {
 	@Test
 	public void testSize()
 	{
-		// TODO: implement this test
+		// DONE: implement this test
+		int listSize = emptyList.size();
+		assertEquals("Size: check empty list is size 0", 0, listSize);
+		
+		listSize = list1.size();
+		assertEquals("Size: check list1 is size 3", 3, listSize);
+		
+		listSize = longerList.size();
+		assertEquals("Size: check longer list is size LONG_LIST_LENGTH", LONG_LIST_LENGTH, listSize);
 	}
 
 	
@@ -144,16 +177,71 @@ public class MyLinkedListTester {
 	@Test
 	public void testAddAtIndex()
 	{
-        // TODO: implement this test
+        // DONE: implement this test
+		try {
+			longerList.add(69, -1);
+			fail("Check out of bounds");
+		}
+		catch (IndexOutOfBoundsException e) {
 		
+		}
+		try {
+			longerList.add(69, LONG_LIST_LENGTH);
+			fail("Check out of bounds");
+		}
+		catch (IndexOutOfBoundsException e) {
+		}
+	
+		// test adding to an empty list
+		emptyList.add(0, 69);
+		assertEquals("test that the element was added", (Integer)69, emptyList.get(0));
+		assertEquals("test that the size is correct", 1, emptyList.size());
+		
+		// test adding to the middle of the list
+		longerList.add(5, 69);
+		assertEquals("test that the element was added at the right index",
+				(Integer)69, longerList.get(5));
+		assertEquals("test that the list size is LONG_LIST_SIZE+1", 
+				(LONG_LIST_LENGTH+1), longerList.size());
 	}
 	
 	/** Test setting an element in the list */
 	@Test
 	public void testSet()
 	{
-	    // TODO: implement this test
+	    // DONE: implement this test
+		// test setting an out of bounds element
+		try {
+			emptyList.set(69, 0);
+			fail("Check out of bounds");
+		}
+		catch (IndexOutOfBoundsException e) {
+		}
+		
+		try {
+			longerList.set(69, -1);
+			fail("Check out of bounds");
+		}
+		catch (IndexOutOfBoundsException e) {
+		}
+		
+		try {
+			longerList.set(69, LONG_LIST_LENGTH);
+			fail("Check out of bounds");
+		}
+		catch (IndexOutOfBoundsException e) {
+		}
 	    
+		// test setting the first element
+		list1.set(0, 69);
+		assertEquals("test the element was set", (Integer)69, list1.get(0));
+		assertEquals("test that the size has not changed", 3, list1.size());
+		
+		// test setting a middle element
+		longerList.set(LONG_LIST_LENGTH/2, 69);
+		assertEquals("test the element was set", (Integer)69, longerList.get(LONG_LIST_LENGTH/2));
+		assertEquals("test that the size has not changed", LONG_LIST_LENGTH, longerList.size());
+		
 	}
 	
 	
