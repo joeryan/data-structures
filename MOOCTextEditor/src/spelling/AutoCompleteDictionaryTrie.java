@@ -1,6 +1,7 @@
 package spelling;
 
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Collection;
 import java.util.HashMap;
@@ -29,7 +30,20 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	public boolean addWord(String word)
 	{
 	    //TODO: Implement this method.
+		TrieNode curr = root;
+		String theWord = word.toLowerCase();
+		if (!isWord(theWord)) {
+			for (Character c : theWord.toCharArray()) {
+				if (curr.getChild(c) == null) {
+					curr.insert(c);
+				}
+				curr = curr.getChild(c);
+			}
+			curr.setEndsWord(true);
+			return true;
+		} else {
 	    return false;
+		}
 	}
 	
 	/** 
@@ -39,7 +53,24 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	public int size()
 	{
 	    //TODO: Implement this method
-	    return 0;
+		TrieNode curr = root;
+		Queue<TrieNode> q = new LinkedList<TrieNode>();
+		int wordCount = 0;
+		while (curr != null) {
+			for (Character c : curr.getValidNextCharacters()) {
+				q.add(curr.getChild(c));
+			}
+			if (curr.endsWord()) {
+				wordCount ++;
+			}
+			if (q.isEmpty()) {
+				curr = null;
+			} else {
+				curr = q.remove();
+			}
+		}
+		
+		return wordCount;
 	}
 	
 	
@@ -48,7 +79,13 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	public boolean isWord(String s) 
 	{
 	    // TODO: Implement this method
-		return false;
+		TrieNode curr = find(s); 
+
+		if (curr != null) {
+			return curr.endsWord();
+		} else {
+			return false;
+		}
 	}
 
 	/** 
@@ -75,8 +112,25 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
     	 //       If it is a word, add it to the completions list
     	 //       Add all of its child nodes to the back of the queue
     	 // Return the list of completions
-    	 
-         return null;
+    	 TrieNode curr = find(prefix);
+    	 LinkedList<String> wordList = new LinkedList<String>(); 
+    	 if (curr != null) {
+    		Queue<TrieNode> q = new LinkedList<TrieNode>();
+   			while (curr != null && wordList.size() < numCompletions) {
+   				for (Character c : curr.getValidNextCharacters()) {
+   					q.add(curr.getChild(c));
+   				}
+   				if (curr.endsWord()) {
+    				wordList.add(curr.getText());
+    				}
+   				if (q.isEmpty()) {
+    				curr = null;
+    			} else {
+    				curr = q.remove();
+   				} 	
+   			}
+    	 }
+   		return wordList;
      }
 
  	// For debugging
@@ -100,6 +154,17 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
  		}
  	}
  	
-
+ 	private TrieNode find(String s) {
+		TrieNode curr = root;
+		String toFind = s.toLowerCase();
+		for (Character c : toFind.toCharArray()) {
+				if (curr.getChild(c) != null) {
+					curr = curr.getChild(c);
+				} else {
+					return null;
+				}
+		}
+		return curr;
+ 	}
 	
 }
